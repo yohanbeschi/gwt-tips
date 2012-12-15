@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration threshold="@log4j.level@">
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Console Appender                                -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="target" value="System.out" />
+        <param name="threshold" value="trace" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d] - [%t] %-5p | %c#%M() | %F:%L - %m%n" />
+        </layout>
+    </appender>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Main File Appender - Used in production         -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <appender name="main" class="org.isk.gwttips.logging.DatedFileAppender">
+        <param name="directory" value="@logs.path@/" />
+        <param name="prefix" value="gwttips." />
+        <param name="append" value="true" />
+        <param name="encoding" value="UTF-8" />
+        <param name="threshold" value="error" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d] [%t] %-5p | %c#%M() | %F:%L - %m%n" />
+        </layout>
+    </appender>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- HTML File Appender - To log generated HTML      -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <appender name="html-appender" class="org.isk.gwttips.logging.DatedFileAppender">
+        <param name="directory" value="@logs.path@/" />
+        <param name="prefix" value="gwttips-html." />
+        <param name="append" value="true" />
+        <param name="encoding" value="UTF-8" />
+        <param name="threshold" value="trace" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d] [%t] %-5p | %c#%M() | %F:%L - %m%n" />
+        </layout>
+    </appender>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Dev File Appender - To log trace to warning msg -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <appender name="dev" class="org.isk.gwttips.logging.DatedFileAppender">
+        <param name="directory" value="@logs.path@/" />
+        <param name="prefix" value="gwttips-trace." />
+        <param name="append" value="true" />
+        <param name="encoding" value="UTF-8" />
+        <param name="threshold" value="trace" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="conversionPattern" value="[%d] [%t] %-5p | %c#%M() | %F:%L - %m%n" />
+        </layout>
+
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="levelMin" value="trace" />
+            <param name="levelMax" value="warning" />
+        </filter>
+    </appender>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Application logging                             -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <logger name="org.isk.gwttips" additivity="false">
+        <appender-ref ref="dev" />
+        <appender-ref ref="console" />
+    </logger>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- HTML logging                                    -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <logger name="html" additivity="false">
+        <appender-ref ref="html-appender" />
+    </logger>
+
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Root logging                                    -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <root>
+        <appender-ref ref="main" />
+    </root>
+</log4j:configuration>
