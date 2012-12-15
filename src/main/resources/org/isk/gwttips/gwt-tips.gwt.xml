@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+<module rename-to="gwttips">
+    <!-- Inherit the core Web Toolkit -->
+    <inherits name='com.google.gwt.user.User' />
+
+    <!-- Theme -->
+    <inherits name="com.google.gwt.user.theme.clean.Clean" />
+
+    <!-- Logging -->
+    <inherits name="com.google.gwt.logging.Logging" />
+    <set-property name="gwt.logging.enabled" value="@gwt.log.enabled@" />
+    <set-property name="gwt.logging.logLevel" value="@gwt.log.level@" />
+
+    <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
+    <set-property name="gwt.logging.consoleHandler" value="DISABLED" />
+    <set-property name="gwt.logging.developmentModeHandler" value="DISABLED" />
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+    <set-property name="gwt.logging.systemHandler" value="DISABLED" />
+
+    <!-- Entry Point -->
+    <entry-point class='org.isk.gwttips.client.GwtTips' />
+</module>
