@@ -7,6 +7,12 @@
     <!-- Theme -->
     <inherits name="com.google.gwt.user.theme.clean.Clean" />
 
+    <!-- i18n -->
+    <inherits name="com.google.gwt.i18n.I18N" />
+    <extend-property name="locale" values="en"/>
+    <extend-property name="locale" values="fr"/>
+    <set-property-fallback name="locale" value="en"/>
+    
     <!-- Logging -->
     <inherits name="com.google.gwt.logging.Logging" />
     <set-property name="gwt.logging.enabled" value="@gwt.log.enabled@" />
@@ -18,6 +24,10 @@
     <set-property name="gwt.logging.popupHandler" value="DISABLED" />
     <set-property name="gwt.logging.systemHandler" value="DISABLED" />
 
+    <!-- Specify the paths for translatable code -->
+    <source path='client'/>
+    <source path='shared'/>
+    
     <!-- Entry Point -->
     <entry-point class='org.isk.gwttips.client.GwtTips' />
 </module>
