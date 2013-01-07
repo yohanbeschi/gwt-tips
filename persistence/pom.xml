@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+        <groupId>org.isk.gwt.tips</groupId>
+        <artifactId>parent</artifactId>
+        <version>0.1</version>
+    </parent>
+	
+	<artifactId>persistence</artifactId>
+	<packaging>jar</packaging>
+
+	<name>gwttips-persistence</name>
+	<description>Persistence</description>
+
+    <properties>
+        <!-- H2 -->
+        <!-- jdbc driver dependency -->
+        <jdbc.groupId>com.h2database</jdbc.groupId>
+        <jdbc.artifactId>h2</jdbc.artifactId>
+        <jdbc.version>1.3.170</jdbc.version>
+        <!-- jdbc settings -->
+        <jdbc.type>h2</jdbc.type>
+        <jdbc.driver>org.h2.Driver</jdbc.driver>
+        <jdbc.url>jdbc:h2:${project.build.directory}/.h2/${project.name};MVCC=TRUE</jdbc.url>
+        <jdbc.user>${project.name}</jdbc.user>
+        <jdbc.password>${project.name}</jdbc.password>
+        <hibernate.dialect>org.hibernate.dialect.H2Dialect</hibernate.dialect>
+        <sql-maven-plugin.delimiter>;</sql-maven-plugin.delimiter>
+        
+        <!-- Log level, see by src/test/resources/log4j.xml -->
+        <log4j.level>debug</log4j.level>
+    </properties>
+
+	<dependencies>
+        <dependency>
+            <groupId>org.isk.gwt.tips</groupId>
+            <artifactId>persistence-core</artifactId>
+        </dependency>
+        
+        <!-- ~~~~ -->
+        <!-- TEST -->
+        <!-- ~~~~ -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${jdbc.groupId}</groupId>
+            <artifactId>${jdbc.artifactId}</artifactId>
+            <version>${jdbc.version}</version>
+            <scope>test</scope>
+        </dependency>
+	</dependencies>
+    
+    <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <!-- http://mojo.codehaus.org/sql-maven-plugin/ -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <executions>
+                   <execution>
+                       <id>Create and initialize the database</id>
+                       <phase>initialize</phase>
+                       <goals>
+                           <goal>execute</goal>
+                       </goals>
+                   </execution>
+               </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

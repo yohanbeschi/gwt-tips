@@ -2,14 +2,20 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.isk</groupId>
-    <artifactId>gwt-tips</artifactId>
-    <version>0.1</version>
-    <packaging>war</packaging>
-
-    <name>gwt-tips</name>
+    <groupId>org.isk.gwt.tips</groupId>
+    <artifactId>parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.1</version>
+	
+	<name>gwt-tips</name>
     <url>http://blog.soat.fr</url>
-
+	
+	<modules>
+        <module>persistence-core</module>
+        <module>persistence</module>
+		<module>front</module>
+    </modules>
+    
     <properties>
         <!-- ~~~~~~~~~~~~~~~ -->
         <!-- Code Properties -->
@@ -20,8 +26,11 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Dependencies version -->
         <!-- ~~~~~~~~~~~~~~~~~~~~ -->
-        <gwt.version>2.5.0</gwt.version>
+        <hibernate.version>4.1.7.Final</hibernate.version>
+        <spring.version>3.1.2.RELEASE</spring.version>
         <slf4j.version>1.6.6</slf4j.version>
+        <gwt.version>2.5.0</gwt.version>
+        
         <junit.version>4.10</junit.version>
         
         <!-- ~~~~~~~~~~~~~~~ -->
@@ -35,53 +44,213 @@
         <gwt-maven-plugin.version>2.5.0</gwt-maven-plugin.version>
         <maven-war-plugin.version>2.3</maven-war-plugin.version>
         <maven-install-plugin.version>2.4</maven-install-plugin.version>
+        <sql-maven-plugin.version>1.5</sql-maven-plugin.version>
     </properties>
-
-    <dependencies>
-        <!-- ~~~ -->
-        <!-- GWT -->
-        <!-- ~~~ -->
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-servlet</artifactId>
-            <version>${gwt.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwt.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- ~~~~~~~ -->
-        <!-- Logging -->
-        <!-- ~~~~~~~ -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- ~~~~ -->
-        <!-- TEST -->
-        <!-- ~~~~ -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
+    
+    <dependencyManagement>
+        <dependencies>
+            <!-- ~~~~~~~~ -->
+            <!-- Gwt-Tips -->
+            <!-- ~~~~~~~~ -->
+            <dependency>
+                <groupId>org.isk.gwt.tips</groupId>
+                <artifactId>persistence-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.isk.gwt.tips</groupId>
+                <artifactId>persistence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        
+            <!-- ~~~~~~~~~~~ -->
+            <!-- PERSISTENCE -->
+            <!-- ~~~~~~~~~~~ -->
+            <dependency>
+                <groupId>org.hibernate.javax.persistence</groupId>
+                <artifactId>hibernate-jpa-2.0-api</artifactId>
+                <version>1.0.1.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-ehcache</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-entitymanager</artifactId>
+                <version>${hibernate.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>2.2.2</version>
+                <scope>runtime</scope>
+            </dependency>
+            
+            <!-- ~~~~~~~~~~ -->
+            <!-- VALIDATION -->
+            <!-- ~~~~~~~~~~ -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>4.2.0.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator-annotation-processor</artifactId>
+                <version>4.2.0.Final</version>
+                <scope>provided</scope>
+            </dependency>
+        
+            <!-- ~~~~~~ -->
+            <!-- SPRING -->
+            <!-- ~~~~~~ -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-orm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>1.6.12</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>1.6.12</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.ehcache-spring-annotations</groupId>
+                <artifactId>ehcache-spring-annotations</artifactId>
+                <version>1.2.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            
+            <!-- ~~~~~ -->
+            <!-- UTILS -->
+            <!-- ~~~~~ -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>12.0</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+        
+            <!-- ~~~ -->
+            <!-- GWT -->
+            <!-- ~~~ -->
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-servlet</artifactId>
+                <version>${gwt.version}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.gwt</groupId>
+                <artifactId>gwt-user</artifactId>
+                <version>${gwt.version}</version>
+                <scope>provided</scope>
+            </dependency>
+    
+            <!-- ~~~~~~~ -->
+            <!-- Logging -->
+            <!-- ~~~~~~~ -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+    
+            <!-- ~~~~ -->
+            <!-- TEST -->
+            <!-- ~~~~ -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <build>
-        <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
-
         <!-- ~~~~~~~~~~~~~~~~~~~ -->
         <!-- Filtering Resources -->
         <!-- ~~~~~~~~~~~~~~~~~~~ -->
@@ -134,38 +303,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
             </plugin>
-
-            <!-- http://mojo.codehaus.org/gwt-maven-plugin/ -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <runTarget>gwttips.html</runTarget>
-                    <cssFile>org/isk/gwttips/public/gwttips.css</cssFile>
-                    <i18nConstantsBundle>org.isk.gwttips.client.i18n.TextConstants</i18nConstantsBundle>
-                    <i18nMessagesBundle>org.isk.gwttips.client.i18n.TextMessages</i18nMessagesBundle>
-                    <i18nConstantsWithLookupBundle>org.isk.gwttips.client.i18n.ErrorConstants</i18nConstantsWithLookupBundle>
-                </configuration>
-            </plugin>
-
-            <!-- http://maven.apache.org/plugins/maven-war-plugin/ -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war-plugin.version}</version>
-                <configuration>
-                    <webxml>src/main/webapp/WEB-INF/web.xml</webxml>
-                </configuration>
-            </plugin>
-
+            
             <!-- http://maven.apache.org/plugins/maven-install-plugin/ -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -173,6 +311,83 @@
                 <version>${maven-install-plugin.version}</version>
             </plugin>
         </plugins>
+        
+        <pluginManagement>
+            <plugins>
+                <!-- http://mojo.codehaus.org/gwt-maven-plugin/ -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>gwt-maven-plugin</artifactId>
+                    <version>${gwt-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <runTarget>gwttips.html</runTarget>
+                        <cssFile>org/isk/gwttips/public/gwttips.css</cssFile>
+                        <i18nConstantsBundle>org.isk.gwttips.client.i18n.TextConstants</i18nConstantsBundle>
+                        <i18nMessagesBundle>org.isk.gwttips.client.i18n.TextMessages</i18nMessagesBundle>
+                        <i18nConstantsWithLookupBundle>org.isk.gwttips.client.i18n.ErrorConstants</i18nConstantsWithLookupBundle>
+                    </configuration>
+                </plugin>
+    
+                <plugin>
+                    <!-- http://mojo.codehaus.org/sql-maven-plugin/ -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>sql-maven-plugin</artifactId>
+                    <version>${sql-maven-plugin.version}</version>
+                    <configuration>
+                        <driver>${jdbc.driver}</driver>
+                        <url>${jdbc.url}</url>
+                        <username>${jdbc.user}</username>
+                        <password>${jdbc.password}</password>
+                        <autocommit>true</autocommit>
+                        <encoding>UTF-8</encoding>
+                        <print>true</print>
+                        <printResultSet>true</printResultSet>
+                        <onError>continue</onError>
+                        <delimiter>${sql-maven-plugin.delimiter}</delimiter>
+                        <orderFile>ascending</orderFile>
+                        <fileset>
+                            <basedir>${basedir}</basedir>
+                            <includes>
+                                <include>src/sql/${jdbc.type}/*.sql</include>
+                            </includes>
+                        </fileset>
+                    </configuration>
+    <!--                <executions> -->
+    <!--                    <execution> -->
+    <!--                        <id>Create and initialize the database</id> -->
+    <!--                        <phase>initialize</phase> -->
+    <!--                        <goals> -->
+    <!--                            <goal>execute</goal> -->
+    <!--                        </goals> -->
+    <!--                    </execution> -->
+    <!--                </executions> -->
+                    <dependencies>
+                        <dependency>
+                            <groupId>${jdbc.groupId}</groupId>
+                            <artifactId>${jdbc.artifactId}</artifactId>
+                            <version>${jdbc.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>  
+
+                <!-- http://maven.apache.org/plugins/maven-war-plugin/ -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${maven-war-plugin.version}</version>
+                    <configuration>
+                        <webxml>src/main/webapp/WEB-INF/web.xml</webxml>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
     
     <!-- ~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -181,9 +396,6 @@
     <profiles>
         <profile>
             <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <properties>
                 <profile.id>dev</profile.id>
                 <!-- H2 -->
@@ -208,9 +420,6 @@
                 
                 <!-- Dependencies version -->
                 <jetty.version>6.1.26</jetty.version>
-                
-                <!-- Plugins version -->
-                <sql-maven-plugin.version>1.5</sql-maven-plugin.version>
             </properties>
             
             <dependencies>
@@ -239,54 +448,17 @@
                 <dependency>
                     <groupId>commons-dbcp</groupId>
                     <artifactId>commons-dbcp</artifactId>
-                    <version>1.4</version>
+                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
-            
             <build>
                 <plugins>
                     <plugin>
                         <!-- http://mojo.codehaus.org/sql-maven-plugin/ -->
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>sql-maven-plugin</artifactId>
-                        <version>${sql-maven-plugin.version}</version>
-                        <configuration>
-                            <driver>${jdbc.driver}</driver>
-                            <url>${jdbc.url}</url>
-                            <username>${jdbc.user}</username>
-                            <password>${jdbc.password}</password>
-                            <autocommit>true</autocommit>
-                            <encoding>UTF-8</encoding>
-                            <print>true</print>
-                            <printResultSet>true</printResultSet>
-                            <onError>continue</onError>
-                            <delimiter>${sql-maven-plugin.delimiter}</delimiter>
-                            <orderFile>ascending</orderFile>
-                            <fileset>
-                                <basedir>${basedir}</basedir>
-                                <includes>
-                                    <include>src/sql/${jdbc.type}/*.sql</include>
-                                </includes>
-                            </fileset>
-                        </configuration>
-        <!--                <executions> -->
-        <!--                    <execution> -->
-        <!--                        <id>Create and initialize the database</id> -->
-        <!--                        <phase>initialize</phase> -->
-        <!--                        <goals> -->
-        <!--                            <goal>execute</goal> -->
-        <!--                        </goals> -->
-        <!--                    </execution> -->
-        <!--                </executions> -->
-                        <dependencies>
-                            <dependency>
-                                <groupId>${jdbc.groupId}</groupId>
-                                <artifactId>${jdbc.artifactId}</artifactId>
-                                <version>${jdbc.version}</version>
-                            </dependency>
-                        </dependencies>
                     </plugin>
-                    
+            
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-war-plugin</artifactId>
@@ -319,4 +491,4 @@
             </properties>
         </profile>
     </profiles>
-</project>
+</project>	
